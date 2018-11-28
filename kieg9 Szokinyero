@@ -1,0 +1,151 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace kieg9
+{
+    class Szokinyero
+    {
+        string szoveg;//adattagok
+        string[] szavak;
+
+        //konstruktor
+        public Szokinyero(string szoveg)
+        {
+            this.szoveg = szoveg;
+        }
+
+        //tulajdonság(property)
+        public string Szoveg
+        {
+            get { return this.szoveg; }
+        }
+
+        public void Felvag()
+        {
+            this.szavak = szoveg.Split(' ');// szőköz szerint 
+        }
+        public void  VegetTisztit()
+        {
+            char[] tiltottKarakterek = { ',', '.', '?', '!', ':', ';' };
+            for (int i = 0; i < szavak.Length; i++)
+            {
+                char utolsoKarakter = szavak[i][szavak[i].Length-1];
+                for (int j = 0; j < tiltottKarakterek.Length; j++)
+                {
+                    if (utolsoKarakter==tiltottKarakterek[j])
+                    {
+                        szavak[i]=szavak[i].Remove(szavak[i].Length-1);
+                    }
+                }
+                
+            }
+
+            //alternatív megoldás a Trim használatával
+            //for (int i = 0; i < szavak.Length; i++)
+            //{
+            //    szavak[i] = szavak[i].Trim(tiltottKarakterek);
+            //}
+            
+           
+        }
+
+        int Sorszam(char betu)
+        {
+            betu = Char.ToLower(betu);
+            string abc = "aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz";
+            int i = 0;
+            while (betu != abc[i])
+            {
+                i++;
+            }
+            return i + 1;
+        }
+
+      
+
+        int Megelozi(string elsoSzo, string masodikSzo)
+        {
+
+            int i = 0;
+            bool kulonbsegetTalalt = false;
+            int elsoSorszam = 0;
+            int masodikSorszam = 0;
+
+            while (i < elsoSzo.Length && i < masodikSzo.Length && kulonbsegetTalalt == false)
+            {
+
+                elsoSorszam = Sorszam(elsoSzo[i]);
+                masodikSorszam = Sorszam(masodikSzo[i]);
+
+                if (elsoSorszam != masodikSorszam)
+                {
+                    kulonbsegetTalalt = true;
+                }
+                else
+                {
+                    i++;
+                }
+
+            }
+
+            if (elsoSorszam == masodikSorszam && elsoSzo.Length == masodikSzo.Length)
+            {
+                return 0;
+            }
+            else if (elsoSorszam < masodikSorszam || (elsoSorszam == masodikSorszam && elsoSzo.Length < masodikSzo.Length))
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+
+            }
+        }
+
+        public void Rendez()
+        {
+            for (int i = 0; i < szavak.Length - 1; i++)
+            {
+                for (int j = i + 1; j < szavak.Length; j++)
+                {
+                    if (Megelozi(szavak[i], szavak[j]) == 1)
+                    {
+                        string temp = szavak[i];
+                        szavak[i] = szavak[j];
+                        szavak[j] = temp;
+
+                    }
+
+                    //alternatív megoldás a CompareTo használatával
+                    //if (szavak[i].CompareTo(szavak[j])==1)
+                    //{
+                    //    string temp = szavak[i];
+                    //    szavak[i] = szavak[j];
+                    //    szavak[j] = temp;
+                    //}
+                }
+            }
+        }
+
+        public void Megjelenit()
+        {
+            Console.WriteLine("Eredeti szöveg:");
+            Console.WriteLine(szoveg);
+
+          
+            Console.WriteLine("Szavak:");
+            for (int i = 0; i < szavak.Length; i++)
+            {
+                Console.WriteLine(szavak[i]);
+            }
+            Console.WriteLine();
+            
+        }
+
+       
+    }
+}
